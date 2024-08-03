@@ -56,14 +56,14 @@ Memories
 TMS1000
 -------
 
-ROM: 1024 bytes (8 bit)
-RAM: 64 nybbles (4 bit)
+    ROM: 1024 bytes (8 bit)
+    RAM: 64 nybbles (4 bit)
 
 TMS1100
 -------
 
-ROM: 2048 bytes  (8 bit)
-RAM: 128 nybbles (4 bit)
+    ROM: 2048 bytes  (8 bit)
+    RAM: 128 nybbles (4 bit)
 
 I/O
 ===
