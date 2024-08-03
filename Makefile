@@ -12,6 +12,11 @@ tms1100:
 	nextpnr-ice40 -r --hx8k --json tms1100.json --package cb132 --asc tms1100.asc --opt-timing --pcf icefun.pcf
 	icepack tms1100.asc tms1100.bin
 
+blips:
+	yosys -q -p "synth_ice40 -top iceblips -json $(PROGRAM).json" src/iceblips.v src/tms1000.v
+	nextpnr-ice40 -r --lp1k --json $(PROGRAM).json --package cm36 --asc $(PROGRAM).asc --opt-timing --pcf iceblips.pcf --pcf-allow-unconstrained
+	icepack $(PROGRAM).asc $(PROGRAM).bin
+
 program:
 	iceFUNprog $(PROGRAM).bin
 
