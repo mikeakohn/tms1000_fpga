@@ -52,6 +52,7 @@ assign column = column_value;
 
 // RAM (TMS1000 is 64 bytes, TMS1100 is 128 bytes).
 reg [3:0] ram [127:0];
+reg [3:0] ram_temp;
 
 // ROM (TMS1000 is 1024 bytes, TMS1100 is 2048 bytes).
 reg [7:0] rom [2047:0];
@@ -205,6 +206,7 @@ always @(posedge clk) begin
       STATE_FETCH_OP_0:
         begin
           instruction <= rom[{ chapter, page, pc }];
+          ram_temp <= ram[reg_xy];
 
           if (pc == 6'h1f) begin
             pc <= { pc[4:0], 1'b1 };
@@ -226,15 +228,15 @@ always @(posedge clk) begin
                   2'b00:
                     case (instruction[3:0])
                       // 0000_0000 mnea   [0x00]
-                      4'b0000: flag_s <= ram[reg_xy] != reg_a;
+                      4'b0000: flag_s <= ram_temp != reg_a;
                       // 0000_0001 alem   [0x01]
-                      4'b0001: update_s <= (reg_a <= ram[reg_xy]);
+                      4'b0001: update_s <= (reg_a <= ram_temp);
                       // 0000_0010 ynea   [0x02]
                       4'b0010: update_s <= reg_y != reg_a;
                       // 0000_0011 xma    [0x03]
                       4'b0011:
                         begin
-                          reg_a <= ram[reg_xy];
+                          reg_a <= ram_temp;
                           ram[reg_xy] <= reg_a;
                         end
                       // 0000_0100 dyn    [0x04]
@@ -242,9 +244,9 @@ always @(posedge clk) begin
                       // 0000_0101 iyc    [0x05]
                       4'b0101: { update_s, reg_y } <= reg_y + 1;
                       // 0000_0110 amaac  [0x06]
-                      4'b0110: { update_s, reg_a } <= reg_a + ram[reg_xy];
+                      4'b0110: { update_s, reg_a } <= reg_a + ram_temp;
                       // 0000_0111 dman   [0x07]
-                      4'b0111: { update_s, reg_a } <= { 0, ram[reg_xy] } - 1;
+                      4'b0111: { update_s, reg_a } <= { 0, ram_temp } - 1;
                       // 0000_1000 tka    [0x08]
                       4'b1000: reg_a <= pins_k;
                       // 0000_1001 comx   [0x09]
@@ -306,9 +308,9 @@ always @(posedge clk) begin
                         // 0010_0000 tay    [0x20]
                         3'b000: reg_y <= reg_a;
                         // 0010_0001 tma    [0x21]
-                        3'b001: reg_a <= ram[reg_xy];
+                        3'b001: reg_a <= ram_temp;
                         // 0010_0010 tmy    [0x22]
-                        3'b010: reg_y <= ram[reg_xy];
+                        3'b010: reg_y <= ram_temp;
                         // 0010_0011 tya    [0x23]
                         3'b011: reg_a <= reg_y;
                         // 0010_0100 tamdyn [0x24]
@@ -336,13 +338,13 @@ always @(posedge clk) begin
                     case (instruction[3:2])
                       2'b00: ram[reg_xy][const2] <= 1;
                       2'b01: ram[reg_xy][const2] <= 0;
-                      2'b10: update_s <= ram[reg_xy][const2];
+                      2'b10: update_s <= ram_temp[const2];
                       2'b11:
                         case (instruction[1:0])
                           // 0011_1100 saman [0x3c]
                           2'b00:
                             begin
-                              { update_s, reg_a } <= { 0, ram[reg_xy] } - reg_a;
+                              { update_s, reg_a } <= { 0, ram_temp } - reg_a;
                             end
                           // 0011_1101 cpaiz [0x3d]
                           2'b01:
@@ -351,9 +353,9 @@ always @(posedge clk) begin
                               update_s <= -reg_a == 0;
                             end
                           // 0011_1110 imac  [0x3e]
-                          2'b10: { update_s, reg_a } <= ram[reg_xy] + 1;
+                          2'b10: { update_s, reg_a } <= ram_temp + 1;
                           // 0011_1111 mnez  [0x3f]
-                          2'b11: update_s <= ram[reg_xy] != 0;
+                          2'b11: update_s <= ram_temp != 0;
                         endcase
                     endcase
                 endcase
@@ -366,7 +368,7 @@ always @(posedge clk) begin
                 // 0111_xxxx alec  [-]
                 case (instruction[5:4])
                   2'b00: reg_y <= const4;
-                  2'b01: update_s <= (ram[reg_xy] != const4);
+                  2'b01: update_s <= (ram_temp != const4);
                   2'b10:
                     begin
                       ram[reg_xy] <= const4;
