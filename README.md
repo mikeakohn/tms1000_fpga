@@ -50,6 +50,8 @@ The algorithm here basically is:
     If PC is currently 0x3f: PC = (PC << 1) | 0
                        Else: PC = (PC << 1) | ~(PC[bit5] ^ PC[bit4])
 
+On reset, the PC will be 0, PB (page) will be 0xf.
+
 Memories
 ========
 
