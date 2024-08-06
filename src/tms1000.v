@@ -178,6 +178,12 @@ always @(posedge clk) begin
           cs <= 0;
           cb <= 0;
           cl <= 0;
+          chapter <= 0;
+          page <= 4'hf;
+          pb <= 4'hf;
+          pins_o <= 0;
+          pins_r <= 0;
+
           delay_loop <= 12000;
           state <= STATE_DELAY_LOOP;
         end
@@ -186,9 +192,6 @@ always @(posedge clk) begin
           // This is probably not needed. The chip starts up fine without it.
           if (delay_loop == 0) begin
             // If button is not pushed, start rom.v code otherwise use EEPROM.
-            chapter <= 0;
-            page <= 0;
-
             if (button_program_select) begin
               pc <= 0;
               state <= STATE_FETCH_OP_0;

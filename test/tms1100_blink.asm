@@ -1,5 +1,6 @@
 .tms1100
-.high_address 1023
+.low_address 0
+.high_address 2047
 
 start:
   tcy 0x0

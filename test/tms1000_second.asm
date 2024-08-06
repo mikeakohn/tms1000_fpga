@@ -1,4 +1,5 @@
 .tms1000
+.low_address 0
 .high_address 1023
 
   cla
