@@ -301,7 +301,7 @@ always @(posedge clk) begin
                     endcase
                   2'b01:
                     // 0001_xxxx ldp [-]
-                    pb <= instruction[3:0];
+                    pb <= const4;
                   2'b10:
                     if (instruction[3] == 1) begin
                       // 0010_1xxx ldx   [-]

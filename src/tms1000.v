@@ -294,7 +294,7 @@ always @(posedge clk) begin
                     endcase
                   2'b01:
                     // 0001_xxxx ldp [-]
-                    pb <= instruction[3:0];
+                    pb <= const4;
                   2'b10:
                     case (instruction[3:0])
                       // 0010_0000 tamiy [0x20]
