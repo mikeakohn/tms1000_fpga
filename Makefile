@@ -36,6 +36,9 @@ blink_tms1100:
 	naken_asm -l -type bin -o rom.bin test/tms1100_blink.asm
 	python3 tools/bin2txt.py rom.bin > rom.txt
 
+simon:
+	python3 tools/bin2txt.py mp3300.bin > rom.txt
+
 clean:
 	@rm -f $(PROGRAM).bin $(PROGRAM).json $(PROGRAM).asc *.lst
 	@rm -f blink.bin test_alu.bin test_shift.bin test_subroutine.bin

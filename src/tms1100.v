@@ -72,11 +72,11 @@ assign clk = clock_div[5];
 
 // Registers.
 reg [3:0] reg_a;
-reg [3:0] reg_x;
+reg [2:0] reg_x;
 reg [3:0] reg_y;
 //reg status_latch = 0;
 
-wire[7:0] reg_xy;
+wire[6:0] reg_xy;
 assign reg_xy = { reg_x, reg_y };
 
 // Instruction.
@@ -243,13 +243,13 @@ always @(posedge clk) begin
                           ram[reg_xy] <= reg_a;
                         end
                       // 0000_0100 dyn    [0x04]
-                      4'b0100: { update_s, reg_y } <= { 0, reg_y } - 1;
+                      4'b0100: { update_s, reg_y } <= { 1'b1, reg_y } - 1;
                       // 0000_0101 iyc    [0x05]
                       4'b0101: { update_s, reg_y } <= reg_y + 1;
                       // 0000_0110 amaac  [0x06]
                       4'b0110: { update_s, reg_a } <= reg_a + ram_temp;
                       // 0000_0111 dman   [0x07]
-                      4'b0111: { update_s, reg_a } <= { 0, ram_temp } - 1;
+                      4'b0111: { update_s, reg_a } <= { 1'b1, ram_temp } - 1;
                       // 0000_1000 tka    [0x08]
                       4'b1000: reg_a <= pins_k;
                       // 0000_1001 comx   [0x09]
@@ -320,7 +320,7 @@ always @(posedge clk) begin
                         3'b100:
                           begin
                             ram[reg_xy] <= reg_a;
-                            { update_s, reg_y } <= { 1'b0, reg_y } - 1;
+                            { update_s, reg_y } <= { 1'b1, reg_y } - 1;
                           end
                         // 0010_0101 tamiyc [0x25]
                         3'b101:
@@ -329,7 +329,7 @@ always @(posedge clk) begin
                             { update_s, reg_y } <= { 1'b0, reg_y } + 1;
                           end
                         // 0010_0110 tamza  [0x26]
-                        3'b110: begin ram[reg_xy] <= reg_a; reg_a <=0; end
+                        3'b110: begin ram[reg_xy] <= reg_a; reg_a <= 0; end
                         // 0010_0111 tam    [0x27]
                         3'b111: ram[reg_xy] <= reg_a;
                       endcase
@@ -347,7 +347,7 @@ always @(posedge clk) begin
                           // 0011_1100 saman [0x3c]
                           2'b00:
                             begin
-                              { update_s, reg_a } <= { 0, ram_temp } - reg_a;
+                              { update_s, reg_a } <= { 1'b1, ram_temp } - reg_a;
                             end
                           // 0011_1101 cpaiz [0x3d]
                           2'b01:
@@ -394,7 +394,7 @@ always @(posedge clk) begin
                       // 0111_0110 a7aac [0x76]
                       4'b0110: { update_s, reg_a } <= reg_a + 7;
                       // 0111_0111 dan [0x77]
-                      4'b0111: { update_s, reg_a } <= { 1, reg_a } - 1;
+                      4'b0111: { update_s, reg_a } <= { 1'b1, reg_a } - 1;
                       // 0111_1000 a2aac [0x78]
                       4'b1000: { update_s, reg_a } <= reg_a + 2;
                       // 0111_1001 a10aac [0x79]

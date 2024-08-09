@@ -72,11 +72,11 @@ assign clk = clock_div[5];
 
 // Registers.
 reg [3:0] reg_a;
-reg [3:0] reg_x;
+reg [1:0] reg_x;
 reg [3:0] reg_y;
 //reg status_latch = 0;
 
-wire[7:0] reg_xy;
+wire[5:0] reg_xy;
 assign reg_xy = { reg_x, reg_y };
 
 // Instruction.
@@ -236,7 +236,7 @@ always @(posedge clk) begin
                       // 0000_0011 tam    [0x03]
                       4'b0011: ram[reg_xy] <= reg_a;
                       // 0000_0100 tamza  [0x04]
-                      4'b0100: begin ram[reg_xy] <= reg_a; reg_a <=0; end
+                      4'b0100: begin ram[reg_xy] <= reg_a; reg_a <= 0; end
                       // 0000_0101 a10aac [0x05]
                       4'b0101: { update_s, reg_a } <= reg_a + 10;
                       // 0000_0110 a6aac  [0x06]
@@ -318,18 +318,18 @@ always @(posedge clk) begin
                       // 0010_0111 saman [0x27]
                       4'b0111:
                         begin
-                          { update_s, reg_a } <= { 1'b0, ram_temp } - reg_a;
+                          { update_s, reg_a } <= { 1'b1, ram_temp } - reg_a;
                         end
                       // 0010_1000 imac  [0x28]
                       4'b1000: { update_s, reg_a } <= ram_temp + 1;
                       // 0010_1001 alem  [0x29]
                       4'b1001: update_s <= (reg_a <= ram_temp);
                       // 0010_1010 dman  [0x2a]
-                      4'b1010: { update_s, reg_a } <= { 1'b0, ram_temp } - 1;
+                      4'b1010: { update_s, reg_a } <= { 1'b1, ram_temp } - 1;
                       // 0010_1011 iyc   [0x2b]
                       4'b1011: { update_s, reg_y } <= reg_y + 1;
                       // 0010_1100 dyn   [0x2c]
-                      4'b1100: { update_s, reg_y } <= { 1'b0, reg_y } - 1;
+                      4'b1100: { update_s, reg_y } <= { 1'b1, reg_y } - 1;
                       // 0010_1101 cpaiz [0x2d]
                       4'b1101:
                         begin
