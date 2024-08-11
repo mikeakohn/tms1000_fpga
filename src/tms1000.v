@@ -83,10 +83,7 @@ assign reg_xy = { reg_x, reg_y };
 // page is labled PA in the docs.
 // pb is the page buffer, used to store / restore page for call / retn.
 // cl is call latch. It's set when currently in a subroutine.
-// cb is chapter buffer.
-// cs is chapter subroutine.
 // sr is where pc gets copied to (and restored from) for call / retn.
-reg chapter = 0;
 reg [3:0] page = 0;
 reg [5:0] pc = 0;
 reg [7:0] instruction;
@@ -100,8 +97,6 @@ wire [1:0] const2;
 assign const2 = { instruction[0], instruction[1] };
 
 reg cl;
-reg cb;
-reg cs;
 reg [3:0] pb;
 reg [5:0] sr;
 
@@ -175,10 +170,7 @@ always @(posedge clk) begin
         begin
           flag_s <= 0;
           sr <= 0;
-          cs <= 0;
-          cb <= 0;
           cl <= 0;
-          chapter <= 0;
           page <= 4'hf;
           pb <= 4'hf;
           pins_o <= 0;
@@ -283,12 +275,12 @@ always @(posedge clk) begin
                       4'b1110: reg_a <= reg_a + 1;
                       // 0000_1111 retn   [0x0f]
                       4'b1111:
-                        if (cl == 1) begin
-                          pc <= sr;
-                          page <= pb;
-                          chapter <= cs;
-                          cl <= 0;
-                        end else begin
+                        begin
+                          if (cl == 1) begin
+                            pc <= sr;
+                            cl <= 0;
+                          end
+
                           page <= pb;
                         end
                     endcase
@@ -379,45 +371,27 @@ always @(posedge clk) begin
               begin
                 // 10xxxxxx br [-]
                 if (flag_s == 1) begin
-                  // FIXME: Is this right?
-                  update_s <= 0;
-
-                  // TMS1100 uses chapter.
-                  chapter <= cb;
+                  pc <= instruction[5:0];
 
                   if (cl == 0) begin
                     page <= pb;
-                    pc <= instruction[5:0];
-                  end else begin
-                    pc <= instruction[5:0];
                   end
-                end else begin
-                  update_s <= 1;
                 end
               end
             2'b11:
               begin
                 // 11xxxxxx call [-]
                 if (flag_s == 1) begin
-                  // FIXME: Is this right?
-                  update_s <= 0;
+                  pc <= instruction[5:0];
 
-                  // TMS1100 uses chapter.
-                  chapter <= cb;
-
-                  if (cl == 1) begin
-                    cs <= chapter;
+                  if (cl == 0) begin
                     sr <= pc;
                     page <= pb;
                     pb <= page;
-                    pc <= instruction[5:0];
                     cl <= 1;
                   end else begin
-                    pc <= instruction[5:0];
                     pb <= page;
                   end
-                end else begin
-                  update_s <= 1;
                 end
               end
           endcase

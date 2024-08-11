@@ -290,12 +290,13 @@ always @(posedge clk) begin
                       4'b1110: update_s <= pins_k != 0;
                       // 0000_1111 retn   [0x0f]
                       4'b1111:
-                        if (cl == 1) begin
-                          pc <= sr;
-                          page <= pb;
-                          chapter <= cs;
-                          cl <= 0;
-                        end else begin
+                        begin
+                          if (cl == 1) begin
+                            pc <= sr;
+                            chapter <= cs;
+                            cl <= 0;
+                          end
+
                           page <= pb;
                         end
                     endcase
@@ -418,45 +419,32 @@ always @(posedge clk) begin
               begin
                 // 10xxxxxx br [-]
                 if (flag_s == 1) begin
-                  // FIXME: Is this right?
-                  update_s <= 0;
+                  if (cl == 0) begin
+                    page <= pb;
+                  end
 
                   // TMS1100 uses chapter.
                   chapter <= cb;
-
-                  if (cl == 0) begin
-                    page <= pb;
-                    pc <= instruction[5:0];
-                  end else begin
-                    pc <= instruction[5:0];
-                  end
-                end else begin
-                  update_s <= 1;
+                  pc <= instruction[5:0];
                 end
               end
             2'b11:
               begin
                 // 11xxxxxx call [-]
                 if (flag_s == 1) begin
-                  // FIXME: Is this right?
-                  update_s <= 0;
-
-                  // TMS1100 uses chapter.
-                  chapter <= cb;
-
-                  if (cl == 1) begin
+                  if (cl == 0) begin
                     cs <= chapter;
                     sr <= pc;
                     page <= pb;
                     pb <= page;
-                    pc <= instruction[5:0];
                     cl <= 1;
                   end else begin
-                    pc <= instruction[5:0];
                     pb <= page;
                   end
-                end else begin
-                  update_s <= 1;
+
+                  // TMS1100 uses chapter.
+                  chapter <= cb;
+                  pc <= instruction[5:0];
                 end
               end
           endcase
