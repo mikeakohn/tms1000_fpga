@@ -353,8 +353,10 @@ always @(posedge clk) begin
                           // 0011_1101 cpaiz [0x3d]
                           2'b01:
                             begin
+                              // Set status if reg_a was 0 before the change.
+                              // It shouldn't matter since -0 is 0.
                               reg_a <= -reg_a;
-                              update_s <= -reg_a == 0;
+                              update_s <= reg_a == 0;
                             end
                           // 0011_1110 imac  [0x3e]
                           2'b10: { update_s, reg_a } <= ram_temp + 1;

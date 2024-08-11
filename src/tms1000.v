@@ -141,6 +141,7 @@ end
 always @(posedge raw_clk) begin
   case (count[9:7])
     3'b000: begin column_value <= 4'b0111; leds_value <= ~{ reg_x, reg_y }; end
+    //3'b000: begin column_value <= 4'b0111; leds_value <= ~{ pins_r }; end
     //3'b010: begin column_value <= 4'b1011; leds_value <= ~instruction; end
     3'b010: begin column_value <= 4'b1011; leds_value <= ~{ flag_s, reg_a }; end
     3'b100: begin column_value <= 4'b1101; leds_value <= ~{ page[1:0], pc[5:0] }; end
@@ -266,7 +267,7 @@ always @(posedge clk) begin
                           end
                         end
                       // 0000_1011 clo    [0x0b]
-                      4'b1011: pins_r <= 0;
+                      4'b1011: pins_o <= 0;
                       // 0000_1100 rstr   [0x0c]
                       4'b1100: pins_r[reg_y[3:0]] <= 0;
                       // 0000_1101 setr   [0x0d]
@@ -325,8 +326,10 @@ always @(posedge clk) begin
                       // 0010_1101 cpaiz [0x2d]
                       4'b1101:
                         begin
+                          // Set status if reg_a was 0 before the change.
+                          // It shouldn't matter since -0 is 0.
                           reg_a <= -reg_a;
-                          update_s <= -reg_a == 0;
+                          update_s <= reg_a == 0;
                         end
                       // 0010_1110 xma   [0x2e]
                       4'b1110:

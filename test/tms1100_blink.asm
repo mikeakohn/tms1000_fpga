@@ -2,6 +2,8 @@
 .low_address 0
 .high_address 2047
 
+;; 0x3c0 (1111 000000) is the linear address for f/00.
+.org 0x3c0
 start:
   tcy 0x0
   setr

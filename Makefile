@@ -37,8 +37,8 @@ blink_tms1100:
 	python3 tools/bin2txt.py rom.bin > rom.txt
 
 simon:
-	#python3 tools/bin2txt.py mp3300.bin > rom.txt
-	python3 tools/bin2txt.py simon.bin > rom.txt
+	python3 tools/bin2txt.py mp3300.bin > rom.txt
+	#python3 tools/bin2txt.py simon.bin > rom.txt
 
 clean:
 	@rm -f $(PROGRAM).bin $(PROGRAM).json $(PROGRAM).asc *.lst
