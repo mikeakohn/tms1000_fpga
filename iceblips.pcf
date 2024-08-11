@@ -16,8 +16,8 @@
 
 # Input K.
 set_io --warn-no-port pin_k1 D1
-set_io --warn-no-port pin_k2 D6
-set_io --warn-no-port pin_k3 E1
+set_io --warn-no-port pin_k2 D1
+set_io --warn-no-port pin_k3 D6
 set_io --warn-no-port pin_k4 C5
 
 # Output O.
@@ -34,13 +34,13 @@ set_io --warn-no-port pin_k4 C5
 set_io --warn-no-port pin_r0 B1
 set_io --warn-no-port pin_r1 A1
 set_io --warn-no-port pin_r2 A2
-set_io --warn-no-port pin_r3 A3
+#set_io --warn-no-port pin_r3 A3
 set_io --warn-no-port pin_r4 B4
 set_io --warn-no-port pin_r5 B5
 set_io --warn-no-port pin_r6 B6
 set_io --warn-no-port pin_r7 C6
-#set_io --warn-no-port pin_r8 H11
-#set_io --warn-no-port pin_r9 L12
+set_io --warn-no-port pin_r8 A3
+set_io --warn-no-port pin_r9 E6
 #set_io --warn-no-port pin_r10 L14
 
 # Clock signal.

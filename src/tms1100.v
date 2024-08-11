@@ -306,7 +306,7 @@ always @(posedge clk) begin
                   2'b10:
                     if (instruction[3] == 1) begin
                       // 0010_1xxx ldx   [-]
-                      reg_x <= { 1'b0, const3 };
+                      reg_x <= { const3 };
                     end else begin
                       case (instruction[2:0])
                         // 0010_0000 tay    [0x20]

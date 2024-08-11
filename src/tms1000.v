@@ -349,7 +349,7 @@ always @(posedge clk) begin
                       2'b00: ram[reg_xy][const2] <= 1;
                       2'b01: ram[reg_xy][const2] <= 0;
                       2'b10: update_s <= ram_temp[const2];
-                      2'b11: reg_x <= { 2'b00, const2 };
+                      2'b11: reg_x <= { const2 };
                     endcase
                 endcase
               end

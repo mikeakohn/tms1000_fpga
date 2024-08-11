@@ -32,6 +32,10 @@ second:
 	naken_asm -l -type bin -o rom.bin test/tms1000_second.asm
 	python3 tools/bin2txt.py rom.bin > rom.txt
 
+input:
+	naken_asm -l -type bin -o rom.bin test/tms1000_input.asm
+	python3 tools/bin2txt.py rom.bin > rom.txt
+
 blink_tms1100:
 	naken_asm -l -type bin -o rom.bin test/tms1100_blink.asm
 	python3 tools/bin2txt.py rom.bin > rom.txt
