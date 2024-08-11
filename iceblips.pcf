@@ -16,7 +16,7 @@
 
 # Input K.
 set_io --warn-no-port pin_k1 D1
-set_io --warn-no-port pin_k2 D1
+set_io --warn-no-port pin_k2 E1
 set_io --warn-no-port pin_k3 D6
 set_io --warn-no-port pin_k4 C5
 
