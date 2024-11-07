@@ -11,7 +11,7 @@ This can be compensated for by slowing the clock down.
 Registers
 =========
 
-TMS1000 and TMS1100 have the folloing registers:
+TMS1000 and TMS1100 have the following registers:
 
     A: 4 bit
     Y: 4 bit
